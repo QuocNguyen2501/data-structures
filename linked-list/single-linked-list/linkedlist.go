@@ -8,7 +8,7 @@ import (
 type Item interface {}
 
 type Node struct {
-	content string
+	content Item
 	next *Node
 }
 

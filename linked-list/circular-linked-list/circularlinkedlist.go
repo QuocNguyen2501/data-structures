@@ -15,6 +15,7 @@ type Node struct {
 
 type ItemLinkedList struct{
 	head *Node
+	last *Node
 	size int
 	lock sync.RWMutex
 }
@@ -27,10 +28,10 @@ func (ll * ItemLinkedList) Append(t string){
 		ll.head = &Node{nil,t,nil}
 	}else {
 		last := ll.head
-		for last.next != nil {
+		for last.next != nil && last.next != ll.head{
 			last = last.next
 		}
-		last.next = &Node{last,t,nil}
+		last.next = &Node{last,t,ll.head }
 	}
 	ll.size++
 }
@@ -55,6 +56,7 @@ func (ll *ItemLinkedList) Insert(i int, t string) error{
 	addNode := Node{node,t, node.next}
 	node.next = &addNode
 	ll.size++
+	ll.makeCircle()
 	return nil
 }
 
@@ -73,6 +75,7 @@ func (ll *ItemLinkedList) RemoveAt(i int) error {
 	node.next = removeNode.next
 	node.next.previous = node
 	ll.size--
+	ll.makeCircle()
 	return nil
 }
 
@@ -86,7 +89,7 @@ func (ll *ItemLinkedList) IndexOf(t string) int {
 		if node.content == t {
 			return j
 		}
-		if node.next == nil {
+		if node.next == nil || node.next == ll.head {
 			return -1
 		}
 		node = node.next
@@ -102,4 +105,17 @@ func (ll *ItemLinkedList) IsEmpty() bool {
 		return  true
 	}
 	return  false
+}
+
+func (ll *ItemLinkedList) makeCircle(){
+	node := ll.head
+	for {
+		if node.next == nil || node.next == ll.head{
+			break
+		}
+		node = node.next
+	}
+	if node.next != ll.head {
+		node.next = ll.head
+	}
 }
