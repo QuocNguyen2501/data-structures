@@ -17,13 +17,24 @@ func main(){
 		Insert(5).
 		Insert(-10)
 
-	tree.node.PrintInOrder()
+	fmt.Println("==========Print inorder============")
+	tree.PrintInOrder()
 	fmt.Println("============================")
 
+	fmt.Println("==========Print preorder============")
+	tree.PrintPreOrder()
+	fmt.Println("============================")
+
+	fmt.Println("==========Print post-order============")
+	tree.PrintPostOrder()
+	fmt.Println("============================")
+
+
+	fmt.Println("==========Print tree after deleted nodes============")
 	tree.Delete(-20)
 	tree.Delete(15)
 	tree.Delete(5)
 	tree.Delete(-10)
-
-	tree.node.PrintInOrder()
+	tree.PrintInOrder()
+	fmt.Println("============================")
 }

@@ -87,6 +87,8 @@ func (n *BinaryNode) findMaxWithParent(parent *BinaryNode) (*BinaryNode,*BinaryN
 }
 
 func (t *BinaryTree) FindItem(v int64) (*BinaryNode,error) {
+	t.lock.RLock()
+	defer t.lock.RUnlock()
 	return t.node.findItem(v)
 }
 
@@ -103,14 +105,50 @@ func (n *BinaryNode) findItem(v int64) (*BinaryNode,error){
 	return n,nil
 }
 
-func (n *BinaryNode) PrintInOrder(){
+func (t *BinaryTree) PrintInOrder(){
+	t.lock.RLock()
+	defer t.lock.RUnlock()
+	t.node.printInOrder()
+}
+
+func (n *BinaryNode) printInOrder(){
 	if n==nil {
 		return
 	}
 
-	n.left.PrintInOrder()
+	n.left.printInOrder()
 	fmt.Println(n.data)
-	n.right.PrintInOrder()
+	n.right.printInOrder()
+}
+
+func (t *BinaryTree) PrintPreOrder(){
+	t.lock.RLock()
+	defer t.lock.RUnlock()
+	t.node.printPreOrder()
+}
+
+func (n *BinaryNode) printPreOrder(){
+	if n == nil {
+		return
+	}
+	fmt.Println(n.data)
+	n.left.printPreOrder()
+	n.right.printPreOrder()
+}
+
+func (t *BinaryTree) PrintPostOrder(){
+	t.lock.RLock()
+	defer t.lock.RUnlock()
+	t.node.printPostOrder()
+}
+
+func (n *BinaryNode) printPostOrder(){
+	if n == nil {
+		return
+	}
+	n.left.printPostOrder()
+	n.right.printPostOrder()
+	fmt.Println(n.data)
 }
 
 func (n *BinaryNode) ReplaceNode(parent,replacement *BinaryNode) error {
